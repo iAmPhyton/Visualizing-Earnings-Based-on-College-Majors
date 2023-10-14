@@ -69,7 +69,7 @@ plt.show()'''
 ###generate histograms in a go using a for loop
 #using 8 bins to simplify the visuals
 
-cols = ["Sample_size", "Median", "Employed", "Full_time", "ShareWomen", "Unemployment_rate", "Men", "Women"]
+'''cols = ["Sample_size", "Median", "Employed", "Full_time", "ShareWomen", "Unemployment_rate", "Men", "Women"]
 colors = ['blue','green','red','purple','orange','pink','brown','gray']
 # Iterate through the columns
 for i, col in enumerate(cols):
@@ -83,4 +83,96 @@ for i, col in enumerate(cols):
     # Display statistics
     print('-------------------------------')
     print(recent_grads[col].describe())
-    print('-------------------------------')
+    print('-------------------------------')'''
+
+###analysis: going deep on Sample_size, Employed, SharedWomen, and Women
+#exploring Sample_size: finding the percentage of sample size by dividing Sample_size by Full_time_year_round
+'''common_samplesize = recent_grads[recent_grads["Sample_size"].between(0,500)]
+common_samplesize.sort_values(by='Sample_size', ascending=False)
+print(common_samplesize)'''
+##calculating the sample size percentage of the dataset
+'''sample_dataset = recent_grads["Sample_size"] / recent_grads["Full_time_year_round"]
+sample_dataset.describe()
+print(sample_dataset.describe())
+#checking majors(0) with zero(0) people employed
+print(recent_grads[recent_grads["Employed"] == 0])'''
+###checking how many majors are predominantly male
+#adding a new column
+'''recent_grads["gender_majority"] = np.nan
+#adding values to the new column
+recent_grads.loc[recent_grads["ShareWomen"] > .5, "gender_majority"] = "Female"
+recent_grads.loc[recent_grads["ShareWomen"] < .5, "gender_majority"] = "Male"
+print(recent_grads)
+# Create a figure with 1 row and 8 columns
+fig = plt.subplots(1,2, figsize =(10,5))
+
+#differentiate color b/w gender_majority using hue
+sns.histplot(data = recent_grads, x= "gender_majority", hue = "gender_majority") 
+sns.despine(left=True, bottom=True)
+plt.title("gender_majority", weight='bold', fontsize=16)
+
+#display #count on legend
+plt.legend([str(count) for count in recent_grads["gender_majority"].value_counts()], bbox_to_anchor=(1, 1), title='Count')
+plt.show() '''
+
+#creating scatter plots to explore the relationship and distribution between Sample_size & median, Sample_size, median & Unemployment_rate
+'''pairs = [['Sample_size','Median'], ['Sample_size','Median','Unemployment_rate']]
+for pair in range(len(pairs)):
+    pairplot = sns.pairplot(recent_grads[pairs[pair]])
+    pairplot.fig.set_size_inches(10,10)
+    for ax in pairplot.axes.flat: #rorating x-axis lables
+        ax.tick_params("x",labelrotation=45)
+plt.show()'''
+
+#creating scatter matrix to explore the 3 questions
+'''pairs = [['Total','Median'],['ShareWomen','Median'],['Full_time','Median']]
+for pair in range(len(pairs)):
+    pairplot = sns.pairplot(recent_grads[pairs[pair]])
+    pairplot.fig.set_size_inches(10,10)
+    for ax in pairplot.axes.flat: #rotating x-axis labels
+        ax.tick_params("x", labelrotation=45)
+plt.show()'''
+
+#creating bar plots to compare columns
+#first 10 rows
+'''fig, ax = plt.subplots(1,1, figsize =(5,10))
+
+plt.xlabel('Major')
+plt.ylabel('ShareWomen')
+sns.barplot(x=recent_grads[:10]['Major'], y=recent_grads[:10]['ShareWomen'], ci=None)
+ax.set_xticklabels(recent_grads[:10]['Major'], rotation='vertical')
+sns.despine(left=True, bottom=True)
+plt.title("ShareWomen vs Major", weight='bold').set_fontsize('16')
+plt.show() '''
+#last 10 rows
+'''fig, ax = plt.subplots(1,1, figsize =(0,5)) 
+
+plt.xlabel('Major')
+plt.ylabel('ShareWomen')
+sns.barplot(x=recent_grads[-10:]['Major'], y=recent_grads[-10:]['ShareWomen'], ci=None)
+ax.set_xticklabels(recent_grads[-10:]['Major'], rotation='vertical')
+sns.despine(left=True, bottom=True)
+plt.title("ShareWomen vs Major", weight='bold').set_fontsize('16')
+plt.show()'''
+#unemployment_rate vs major
+#first 10 rows
+'''fig, ax = plt.subplots(1,1, figsize=(10,5))
+
+plt.xlabel('Major')
+plt.ylabel('Unemployment_rate')
+sns.barplot(x=recent_grads[:10]['Major'], y=recent_grads[:10]['Unemployment_rate'], ci=None)
+ax.set_xticklabels(recent_grads[:10]['Major'], rotation='vertical')
+sns.despine(left=True, bottom=True)
+plt.title("Unemployment_rate vs Major", weight='bold').set_fontsize('16')
+plt.show() '''
+#last 10 rows
+'''fig, ax = plt.subplots(1,1, figsize=(10,5))
+
+plt.xlabel('Major')
+plt.ylabel('Unemployment_rate')
+sns.barplot(x=recent_grads[-10:]['Major'], y=recent_grads[-10:]['Unemployment_rate'], ci=None)
+ax.set_xticklabels(recent_grads[-10:]['Major'], rotation='vertical')
+sns.despine(left=True, bottom=True)
+plt.title("Unemployment_rate vs Major", weight='bold').set_fontsize('16')
+plt.show()'''
+
